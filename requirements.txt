@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+translatepy
+openai==0.28
+faiss-cpu
+scikit-learn
+sentence-transformers
