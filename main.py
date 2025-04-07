@@ -1,21 +1,30 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pydantic import BaseModel
 from rag_utils import initialize_rag, ask_question
-import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Load all models and index once
+# ✅ Add CORS middleware before defining routes
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or restrict to ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ✅ Load RAG pipeline once at startup
 embedder, index, chunks = initialize_rag("maynasundari.txt")
 
-class Query(BaseModel):
+class QuestionRequest(BaseModel):
     question: str
 
+# ✅ RAG endpoint
 @app.post("/ask")
-async def ask(query: Query):
-    answer_en, answer_gu = ask_question(query.question, embedder, index, chunks)
-    return {"english_answer": answer_en, "gujarati_translation": answer_gu}
-
-# Run locally if needed
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+def ask(req: QuestionRequest):
+    answer_en, answer_gu = ask_question(req.question, embedder, index, chunks)
+    return {
+        "answer_en": answer_en,
+        "answer_gu": answer_gu
+    }
