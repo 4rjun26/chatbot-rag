@@ -43,7 +43,7 @@ def search_index(query, embedder, index, chunks, top_k=3):
 def ask_llama(question, context):
     prompt = f"Answer the following question based on the provided context.\n\nContext:\n{context}\n\nQuestion:\n{question}"
     response = openai.ChatCompletion.create(
-        model="google/gemma-3-27b-it:free",
+        model="meta-llama/llama-3-8b-instruct:free",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7
     )
