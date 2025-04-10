@@ -8,7 +8,6 @@ import os
 
 load_dotenv()
 
-print("API Key:", os.getenv("OPENAI_API_KEY"))
 # Setup OpenRouter API
 openai.api_base = "https://openrouter.ai/api/v1"
 openai.api_key = os.getenv("OPENAI_API_KEY")  # Use from .env
@@ -44,7 +43,7 @@ def search_index(query, embedder, index, chunks, top_k=3):
 def ask_llama(question, context):
     prompt = f"Answer the following question based on the provided context.\n\nContext:\n{context}\n\nQuestion:\n{question}"
     response = openai.ChatCompletion.create(
-        model="meta-llama/llama-3-70b-instruct",
+        model="google/gemma-3-27b-it:free",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7
     )

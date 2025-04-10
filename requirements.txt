@@ -5,3 +5,4 @@ openai==0.28
 faiss-cpu
 scikit-learn
 sentence-transformers
+python-dotenv
